@@ -4,7 +4,7 @@ This is unofficial helm chart of EMQ-X mqtt broker.
 
 ## Requirements
 
-- EMQ X v4.2-rc
+- EMQ X v4.2-rc+
 - Helm v3+
 
 ## Install
@@ -76,5 +76,6 @@ The following table lists the configurable parameters of the drone charts and th
 | `metrics.cloudmonitoring.image.tag` | prometheus-to-sd image tag  | v0.9.2 |
 | `ssl.enabled` | Enable MQTT over SSL and Websocket over SSL | false |
 | `ssl.secret` | Secret name of certificate | "" |
+| `ssl.dir` | Directory for certificate| /opt/emqx/etc/certs |
 | `loglevel` | Log level | debug |
 | `extraEnvs` | Set extra EMQ X configurations | {} |

@@ -15,12 +15,12 @@ data:
   EMQX_CLUSTER__K8S__SUFFIX: svc.cluster.local
   EMQX_LOADED_PLUGINS: {{ include "emqx.loadedPlugins" . }}
   {{- if .Values.ssl.enabled }}
-  EMQX_LISTENER__SSL__EXTERNAL__KEYFILE: /opt/emqx/etc/certs/tls.key
-  EMQX_LISTENER__SSL__EXTERNAL__CERTFILE: /opt/emqx/etc/certs/tls.crt
-  # EMQX_LISTENER__SSL__EXTERNAL__CACERTFILE: /opt/emqx/etc/certs/ca.crt
-  EMQX_LISTENER__WSS__EXTERNAL__KEYFILE: /opt/emqx/etc/certs/tls.key
-  EMQX_LISTENER__WSS__EXTERNAL__CERTFILE: /opt/emqx/etc/certs/tls.crt
-  # EMQX_LISTENER__WSS__EXTERNAL__CACERTFILE: /opt/emqx/etc/certs/ca.crt
+  EMQX_LISTENER__SSL__EXTERNAL__KEYFILE:  {{ .Values.ssl.dir }}/tls.key
+  EMQX_LISTENER__SSL__EXTERNAL__CERTFILE: {{ .Values.ssl.dir }}/tls.crt
+  # EMQX_LISTENER__SSL__EXTERNAL__CACERTFILE: {{ .Values.ssl.dir }}/ca.crt
+  EMQX_LISTENER__WSS__EXTERNAL__KEYFILE: {{ .Values.ssl.dir }}/tls.key
+  EMQX_LISTENER__WSS__EXTERNAL__CERTFILE: {{ .Values.ssl.dir }}/tls.crt
+  # EMQX_LISTENER__WSS__EXTERNAL__CACERTFILE: {{ .Values.ssl.dir }}/ca.crt
   {{- end }}
   {{- /*
     log.to is `console` only.
