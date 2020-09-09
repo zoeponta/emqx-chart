@@ -136,8 +136,28 @@ ssl:
   ## However, EMQ X does not implement to reload certificates.
   ## See also: https://github.com/emqx/emqx/issues/3414
   dir: /opt/emqx/etc/certs
+
 ## 
 loglevel: debug
+
+## Auth/ACL Plugins
+auth:
+  redis:
+    ## Enable redis auth plugin
+    ## See emqx-auth-redis for all configurations.
+    ## link: https://github.com/emqx/emqx-auth-redis 
+    enabled: false
+    type: single
+    server: 127.0.0.1:6379
+    sentinel: mymaster
+    pool: 8
+    database: 0
+    password: ""
+    queryTimeout: 5s
+    authCmd: HMGET mqtt_user:%u password
+    passwordHash: plain
+    superCmd: HGET mqtt_user:%u is_superuser
+    aclCmd: HGETALL mqtt_acl:%u
 
 ## Add extra enviroment variables of EMQ X 
 extraEnvs: {}
