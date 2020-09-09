@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "emqx.fullname" . }}
+  labels:
+    {{- include "emqx.labels" . | nindent 4 }}
+data:
+  EMQX_NAME: {{ include "emqx.fullname" . }}
+  EMQX_CLUSTER__DISCOVERY: k8s 
+  EMQX_CLUSTER__K8S__APP_NAME: {{ include "emqx.fullname" . }}
+  EMQX_CLUSTER__K8S__SERVICE_NAME: {{ include "emqx.fullname" . }}
+  EMQX_CLUSTER__K8S__APISERVER: https://kubernetes.default:443
+  EMQX_CLUSTER__K8S__NAMESPACE: {{ .Release.Namespace }}
+  EMQX_CLUSTER__K8S__ADDRESS_TYPE: hostname
+  EMQX_CLUSTER__K8S__SUFFIX: svc.cluster.local
+  EMQX_LOADED_PLUGINS: {{ include "emqx.loadedPlugins" . }}
+  {{- if .Values.ssl.enabled }}
+  EMQX_LISTENER__SSL__EXTERNAL__KEYFILE: /opt/emqx/etc/certs/tls.key
+  EMQX_LISTENER__SSL__EXTERNAL__CERTFILE: /opt/emqx/etc/certs/tls.crt
+  # EMQX_LISTENER__SSL__EXTERNAL__CACERTFILE: /opt/emqx/etc/certs/ca.crt
+  EMQX_LISTENER__WSS__EXTERNAL__KEYFILE: /opt/emqx/etc/certs/tls.key
+  EMQX_LISTENER__WSS__EXTERNAL__CERTFILE: /opt/emqx/etc/certs/tls.crt
+  # EMQX_LISTENER__WSS__EXTERNAL__CACERTFILE: /opt/emqx/etc/certs/ca.crt
+  {{- end }}
+  {{- /*
+    log.to is `console` only.
+    If it is set to `both`, logging does not work after rotating files.
+  */}}
+  EMQX_LOG__TO: console
+  EMQX_LOG__LEVEL: {{ default "warning" .Values.logLevel }}
+  {{- with .Values.extraEnv }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}

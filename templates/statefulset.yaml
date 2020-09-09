@@ -1,0 +1,139 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "emqx.fullname" . }}
+  labels:
+    {{- include "emqx.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "emqx.fullname" . }}
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "emqx.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "emqx.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "emqx.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: mqtt
+              containerPort: 1883
+            - name: mqtts
+              containerPort: 8883
+            - name: ws
+              containerPort: 8083
+            - name: wss
+              containerPort: 8084
+            - name: management
+              containerPort: 8081
+            - name: dashboard
+              containerPort: 18083
+          envFrom:
+            - configMapRef:
+                name: {{ include "emqx.fullname" . }}
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          readinessProbe:
+            tcpSocket:
+              port: 1883
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: emqx-data
+              mountPath: /opt/emqx/data/mnesia
+            {{- if .Values.ssl.enabled }}
+            - name: emqx-ssl
+              mountPath: /opt/emqx/etc/certs
+              readOnly: true
+            {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.cloudmonitoring.enabled }}
+        - name: metrics-cloudmonitoring
+          image: "{{ .Values.metrics.cloudmonitoring.image.repository }}:{{ .Values.metrics.cloudmonitoring.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /monitor
+            - --source={{ include "emqx.fullname" . }}:http://admin:public@localhost:8081/api/v4/emqx_prometheus?type=prometheus
+            - --stackdriver-prefix=custom.googleapis.com
+            - --monitored-resource-types=k8s
+            - --pod-id=$(POD_name)
+            - --namespace-id=$(POD_NAMESPACE)
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+        {{- end }}
+      {{- if or .Values.ssl.enabled (not .Values.persistence.enabled) }}
+      volumes:
+        {{- if not .Values.persistence.enabled }}
+        - name: emqx-data
+          emptyDir: {}
+        {{- end }}
+        {{- if .Values.ssl.enabled }}
+        - name: emqx-ssl
+          secret:
+            secretName: {{ .Values.ssl.secret }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  {{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: emqx-data
+        labels:
+          {{- include "emqx.labels" . | nindent 10 }}
+        {{- with .Values.persistence.annotations }}
+        annotations:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+          - {{ .Values.persistence.accessMode | quote }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | quote }}
+        {{- if .Values.persistence.storageClass }}
+        {{- if (eq "-" .Values.persistence.storageClass) }}
+        storageClassName: ""
+        {{- else }}
+        storageClassName: {{ .Values.persistence.storageClass }}
+        {{- end }}
+        {{- end }}
+  {{- end }}

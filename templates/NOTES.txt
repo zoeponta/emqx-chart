@@ -1,0 +1,5 @@
+{{- if .Release.IsInstall }}
+The EMQ-X MQTT broker has been installed.
+{{- else }}
+The EMQ-X MQTT broker has been upgraded.
+{{- end }}

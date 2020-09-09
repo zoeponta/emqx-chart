@@ -1,0 +1,139 @@
+# Default values for emqx.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+
+image:
+  repository: emqx/emqx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  # tag: latest
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  mqtt:
+    type: ClusterIP
+    loadBalancerIP:
+    ports:
+      # Port of MQTT
+      mqtt: 1883
+      # Port of MQTT over SSL
+      mqtts: 8883
+      # Port of WebSocket
+      ws:  8083
+      # Port of WebSocket over SSL
+      wss: 8084
+  http:
+    type: ClusterIP
+    ports:
+      # Port of Dashboard
+      dashboard: 18083
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  host: board.example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 500m
+  #   memory: 512Mi
+  # requests:
+  #   cpu: 500m
+  #   memory: 512Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  # targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+  ## TODO: Custom metrics
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+## Persist data to persistent volume
+persistence:
+  enabled: true
+
+  ## Name of storage class
+  # If defined, then `storageClassName: <storageClass>`.
+  # If set to "-", then `storageClassName: ""`, which disables dynamic provisioning.
+  # If undefined or empty (default), then no `storageClassName` spec is set,
+  # so the default provisioner will be chosen (gp2 on AWS, standard on GKE, AWS & OpenStack).
+  storageClass: ""
+
+  ## Access mode
+  accessMode: ReadWriteOnce
+
+  ## Persistent disk size
+  size: 100M
+
+  ## Additional annotations to apply pvc
+  annotations: {}
+
+## Get metrics
+metrics:
+  enabled: false
+
+  ## Send metrics to Cloud Monitoring
+  cloudmonitoring:
+    enabled: false
+    image:
+      repository: gcr.io/google-containers/prometheus-to-sd
+      tags: v0.9.2
+
+
+## Use mqtt and ws over SSL
+ssl:
+  enabled: false
+  ## Secret name
+  ## シークレットは cert-manager で作られた証明書を利用することを想定している。
+  ## そのため、tls.key, tls.crt 固定とする。
+  # secret: ""
+
+## 
+loglevel: debug
+
+## Add extra enviroment variables of EMQ X 
+extraEnvs: {}

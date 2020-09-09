@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "emqx.fullname" . }}-mqtt
+  labels:
+    {{- include "emqx.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.mqtt.type }}
+  {{- if and (eq .Values.service.mqtt.type "LoadBalancer") .Values.service.mqtt.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.mqtt.loadBalancerIP }}
+  {{- end }}
+  ports:
+    {{- if .Values.service.mqtt.ports.mqtt }}
+    - name: mqtt
+      port: {{ .Values.service.mqtt.ports.mqtt }}
+      protocol: TCP
+      targetPort: 1883
+    {{- end }}
+    {{- if .Values.service.mqtt.ports.mqtts }}
+    - name: mqtts
+      port: {{ .Values.service.mqtt.ports.mqtts }}
+      protocol: TCP
+      targetPort: 8883
+    {{- end }}
+    {{- if .Values.service.mqtt.ports.ws }}
+    - name: ws
+      port: {{ .Values.service.mqtt.ports.ws }}
+      protocol: TCP
+      targetPort: 8083
+    {{- end }}
+    {{- if .Values.service.mqtt.ports.wss }}
+    - name: wss
+      port: {{ .Values.service.mqtt.ports.wss }}
+      protocol: TCP
+      targetPort: 8084
+    {{- end }}
+  selector:
+    {{- include "emqx.selectorLabels" . | nindent 4 }}
