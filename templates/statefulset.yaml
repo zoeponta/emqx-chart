@@ -56,8 +56,9 @@ spec:
           #     path: /
           #     port: http
           readinessProbe:
-            tcpSocket:
-              port: 1883
+            httpGet:
+              path: /status
+              port: management
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
