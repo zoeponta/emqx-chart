@@ -90,6 +90,15 @@ The following table lists the configurable parameters of the drone charts and th
 | `loglevel` | Log level | debug |
 | `extraEnvs` | Set extra EMQ X configurations | {} |
 
+### Authentication / Access Control List
+
+| Parameter | Description | Default |
+| --------- | ----------- | ------- |
+| `auth.username.enabled` | Enable username authentication use configuration files | false |
+| `auth.username.users` | List of user info. | [] |
+| `auth.username.users[x].username` | Username | nil |
+| `auth.username.users[x].password` | Password | nil |
+
 
 ## TODO
 

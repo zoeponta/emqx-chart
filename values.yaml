@@ -155,10 +155,17 @@ management:
 
 ## Auth/ACL Plugins
 auth:
+  username:
+    ## Enable username auth plugin
+    ## link: https://docs.emqx.io/broker/latest/en/advanced/auth-username.html
+    enabled: false
+    users: []
+    #  - name: admin
+    #    password: public
   redis:
     ## Enable redis auth plugin
     ## See emqx-auth-redis for all configurations.
-    ## link: https://github.com/emqx/emqx-auth-redis 
+    ## link: https://docs.emqx.io/broker/latest/en/advanced/auth-redis.html
     enabled: false
     type: single
     server: 127.0.0.1:6379
@@ -180,5 +187,12 @@ dashboard:
   defaultUsername: admin
   ## Default user's password.
   defaultPassword: public
+acl: 
+  rulesfile: |
+    {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
+    {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
+    {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
+    {allow, all}.
+
 ## Add extra enviroment variables of EMQ X 
 extraEnvs: {}
