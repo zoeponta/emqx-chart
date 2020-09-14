@@ -2,7 +2,10 @@
 Loaded Plugins
 */}}
 {{- define "emqx.loadedPlugins" -}}
-emqx_management,emqx_recon,emqx_retainer,emqx_dashboard
+emqx_management,emqx_recon,emqx_retainer
+{{- if .Values.dashboard.enabled -}}
+,emqx_dashboard
+{{- end }}
 {{- if .Values.metrics.enabled -}}
 ,emqx_prometheus
 {{- end }}
@@ -15,5 +18,5 @@ emqx_management,emqx_recon,emqx_retainer,emqx_dashboard
 URL to scrap metrics from prometheus
 */}}
 {{- define "emqx.plugin.prometheus.url" -}}
-http://admin:public@localhost:8081/api/v4/emqx_prometheus?type=prometheus
+http://${EMQX_MANAGEMENT__DEFAULT_APPLICATION__ID}:${EMQX_MANAGEMENT__DEFAULT_APPLICATION__SECRET}@localhost:8081/api/v4/emqx_prometheus?type=prometheus
 {{- end }}

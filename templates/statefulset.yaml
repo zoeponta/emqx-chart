@@ -16,6 +16,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -50,6 +51,8 @@ spec:
               containerPort: 18083
           envFrom:
             - configMapRef:
+                name: {{ include "emqx.fullname" . }}
+            - secretRef:
                 name: {{ include "emqx.fullname" . }}
           readinessProbe:
             httpGet:

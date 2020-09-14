@@ -1,4 +1,5 @@
 {{- if .Values.ingress.enabled -}}
+{{- if .Values.dashboard.enabled -}}
 {{- $fullName := include "emqx.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -32,4 +33,5 @@ spec:
               serviceName: {{ include "emqx.fullname" . }}-http
               servicePort: {{ .Values.service.http.ports.dashboard }}
     # TODO: Support ws and wss
+{{- end }}
 {{- end }}

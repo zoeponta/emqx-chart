@@ -78,6 +78,11 @@ The following table lists the configurable parameters of the drone charts and th
 | `ssl.enabled` | Enable MQTT over SSL and Websocket over SSL | false |
 | `ssl.secret` | Secret name of certificate | "" |
 | `ssl.dir` | Directory for certificate| /opt/emqx/etc/certs |
+| `management.application.id` | Default application ID | admin |
+| `management.application.secret` | Default application secret | public |
+| `dashboard.enabled` | Enable dashboard | true |
+| `dashboard.defaultUsername` | Default user name | admin |
+| `dashboard.defaultPassword` | Default user password | public |
 | `loglevel` | Log level | debug |
 | `extraEnvs` | Set extra EMQ X configurations | {} |
 

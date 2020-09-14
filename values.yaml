@@ -146,6 +146,13 @@ ssl:
 ## 
 loglevel: debug
 
+management:
+  application:
+    ## Default Application ID
+    id: admin
+    ## Default Application Secret
+    secret: public
+
 ## Auth/ACL Plugins
 auth:
   redis:
@@ -165,5 +172,13 @@ auth:
     superCmd: HGET mqtt_user:%u is_superuser
     aclCmd: HGETALL mqtt_acl:%u
 
+dashboard:
+  ## Use dashboard
+  enabled: true
+
+  ## Default user's login name.
+  defaultUsername: admin
+  ## Default user's password.
+  defaultPassword: public
 ## Add extra enviroment variables of EMQ X 
 extraEnvs: {}
