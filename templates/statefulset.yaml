@@ -74,7 +74,7 @@ spec:
           imagePullPolicy: IfNotPresent
           command:
             - /monitor
-            - --source={{ include "emqx.fullname" . }}:{{ include "emqx.plugin.prometheus.url" .}}
+            - --source={{ include "emqx.fullname" . }}:{{ include "emqx.metrics.url" .}}
             - --stackdriver-prefix=custom.googleapis.com
             - --monitored-resource-types=k8s
             - --pod-id=$(POD_name)
