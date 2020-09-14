@@ -1,11 +1,15 @@
 # EMQ X Helm chart
 
-This is unofficial helm chart of EMQ-X mqtt broker.
+This is unofficial helm chart of [EMQ-X](https://github.com/emqx/emqx) mqtt broker.
+The official helm chart is [here](https://github.com/emqx/emqx-rel/tree/master/deploy/charts/emqx).
 
 ## Requirements
 
 - EMQ X v4.2
 - Helm v3+
+- Kubernetes 1.16+
+
+I test on minikube and GKE only.
 
 ## Install
 
