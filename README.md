@@ -4,7 +4,7 @@ This is unofficial helm chart of EMQ-X mqtt broker.
 
 ## Requirements
 
-- EMQ X v4.2-rc+
+- EMQ X v4.2
 - Helm v3+
 
 ## Install
