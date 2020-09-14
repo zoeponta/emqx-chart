@@ -1,5 +1,5 @@
-{{- if .Release.IsInstall }}
-The EMQ-X MQTT broker has been installed.
-{{- else }}
-The EMQ-X MQTT broker has been upgraded.
-{{- end }}
+The EMQ-X MQTT broker has been {{ if .Release.IsInstall -}}installed{{ else -}}upgraded{{- end }}.
+
+Access broker by using kubernetes port forwarding
+
+  kubectl port-forward svc/{{ include "emqx.fullname" . }} -n {{ .Release.Namespace }} 1883 8883 8083 8084 8081 18083

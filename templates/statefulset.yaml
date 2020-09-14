@@ -51,10 +51,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "emqx.fullname" . }}
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
           readinessProbe:
             httpGet:
               path: /status
@@ -66,7 +62,7 @@ spec:
               mountPath: /opt/emqx/data/mnesia
             {{- if .Values.ssl.enabled }}
             - name: emqx-ssl
-              mountPath: /opt/emqx/etc/certs
+              mountPath: {{ .Values.ssl.dir }}
               readOnly: true
             {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.cloudmonitoring.enabled }}
@@ -75,7 +71,7 @@ spec:
           imagePullPolicy: IfNotPresent
           command:
             - /monitor
-            - --source={{ include "emqx.fullname" . }}:http://admin:public@localhost:8081/api/v4/emqx_prometheus?type=prometheus
+            - --source={{ include "emqx.fullname" . }}:{{ include "emqx.plugin.prometheus.url" .}}
             - --stackdriver-prefix=custom.googleapis.com
             - --monitored-resource-types=k8s
             - --pod-id=$(POD_name)

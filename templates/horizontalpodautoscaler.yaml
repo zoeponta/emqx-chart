@@ -25,4 +25,5 @@ spec:
         name: memory
         targetAverageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
   {{- end }}
+  # TODO: Custom metrics
 {{- end }}

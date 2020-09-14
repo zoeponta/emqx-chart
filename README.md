@@ -74,8 +74,19 @@ The following table lists the configurable parameters of the drone charts and th
 | `metrics.cloudmonitoring.enabled` | Enable to send metrics to Cloud Monitoring | false |
 | `metrics.cloudmonitoring.image.repository` | prometheus-to-sd image repository | gcr.io/google-containers/prometheus-to-sd |
 | `metrics.cloudmonitoring.image.tag` | prometheus-to-sd image tag  | v0.9.2 |
+| `metrics.servicemonitor.enabled` | (TBD) Enable to use service monitor | false |
 | `ssl.enabled` | Enable MQTT over SSL and Websocket over SSL | false |
 | `ssl.secret` | Secret name of certificate | "" |
 | `ssl.dir` | Directory for certificate| /opt/emqx/etc/certs |
 | `loglevel` | Log level | debug |
 | `extraEnvs` | Set extra EMQ X configurations | {} |
+
+
+## TODO
+
+- ACL / Auth
+- Use ingress for websocket over SSL 
+- Automaticaly reload certificate 
+- Custom metrics
+- Prometheus Operator (ServiceMonitor)
+- 
