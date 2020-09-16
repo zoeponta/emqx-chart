@@ -50,7 +50,7 @@ service:
       # Port of MQTT over SSL
       mqtts: 8883
       # Port of WebSocket
-      ws:  8083
+      ws: 8083
       # Port of WebSocket over SSL
       wss: 8084
   http:
@@ -131,7 +131,7 @@ metrics:
 ## Use mqtt and ws over SSL
 ssl:
   enabled: false
-  ## Secret name 
+  ## Secret name
   ## Create Secret as certficates in `kubernetes.io/tls` format.
   # secret: ""
 
@@ -143,7 +143,7 @@ ssl:
   ## Directory for certificates
   dir: /opt/emqx/etc/certs
 
-## 
+##
 loglevel: debug
 
 management:
@@ -187,12 +187,13 @@ dashboard:
   defaultUsername: admin
   ## Default user's password.
   defaultPassword: public
-acl: 
+
+acl:
   rulesfile: |
     {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
     {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
     {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
     {allow, all}.
 
-## Add extra enviroment variables of EMQ X 
+## Add extra enviroment variables of EMQ X
 extraEnvs: {}
