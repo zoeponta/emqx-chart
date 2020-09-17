@@ -107,7 +107,7 @@ persistence:
   accessMode: ReadWriteOnce
 
   ## Persistent disk size
-  size: 100M
+  size: 30M
 
   ## Additional annotations to apply pvc
   annotations: {}
