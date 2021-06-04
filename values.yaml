@@ -155,13 +155,18 @@ management:
 
 ## Auth/ACL Plugins
 auth:
-  username:
-    ## Enable username auth plugin
-    ## link: https://docs.emqx.io/broker/latest/en/advanced/auth-username.html
+  mnesia:
+    ## Enable mnesia (username/clientid) auth plugin
+    ## link: https://docs.emqx.io/broker/latest/en/advanced/auth-mnesia.html
     enabled: false
+    ## Password hash
+    passwordHash: sha256
+    ## Auth as username or auth as clientid.
+    as: username
     users: []
-    #  - name: admin
+    #  - login: admin
     #    password: public
+    #    superuser: no (optional)
   redis:
     ## Enable redis auth plugin
     ## See emqx-auth-redis for all configurations.

@@ -1,15 +1,4 @@
 {{/*
-Username Auth plugin
-{{- include "emqx.auth.username" .Values.auth.username }}
-*/}}
-{{- define "emqx.auth.username" -}}
-{{- range $i, $v := .users }}
-{{ printf "EMQX_AUTH__USER__%d__USERNAME" $i }}: {{ $v.username | b64enc }}
-{{ printf "EMQX_AUTH__USER__%d__PASSWORD" $i }}: {{ $v.password | b64enc }}
-{{- end }}
-{{- end }}
-
-{{/*
 Redis Auth/ACL plugin
 {{- include "emqx.auth.redis" .Values.auth.redis }}
 */}}
