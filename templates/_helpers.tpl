@@ -60,12 +60,3 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "emqx.ingress.className" -}}
-{{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) -}}
-ingressClassName: {{ .Values.ingress.className }}
-{{- end -}}
-{{- end -}}

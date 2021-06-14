@@ -57,6 +57,7 @@ The following table lists the configurable parameters of the drone charts and th
 | `service.http.type` | Service type for HTTP server | ClusterIP |
 | `service.http.ports.dashboard` | Port for dashboard | 18083 |
 | `ingress.enabled` | Enable ingress | false |
+| `ingress.className` | IngressClass name | "" |
 | `ingress.annotations` | Annotations for Ingress | {} |
 | `ingress.host` | Ingress host| board.example.local |
 | `ingress.tls` | Ingress TLS configuration | nil |
@@ -74,7 +75,7 @@ The following table lists the configurable parameters of the drone charts and th
 | `persistence.accessMode` | Access mode for the volume | ReadWriteOnce |
 | `persistence.size` | Size of the volume | 100M |
 | `persistence.annotations` | Annotations for persistent volume claim | {} |
-| `metrics.enabled` | Enable to get metrics by using emqx_prometheus | false |
+| `metrics.enabled` | Enable to get metrics by using emqx_prometheus | true |
 | `metrics.cloudmonitoring.enabled` | Enable to send metrics to Cloud Monitoring | false |
 | `metrics.cloudmonitoring.image.repository` | prometheus-to-sd image repository | gcr.io/google-containers/prometheus-to-sd |
 | `metrics.cloudmonitoring.image.tag` | prometheus-to-sd image tag  | v0.9.2 |

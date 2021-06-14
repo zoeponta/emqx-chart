@@ -1,5 +1,6 @@
 {{/*
 List of loaded plugins
+This chart must be required emqx_management plugin.
 */}}
 {{- define "emqx.plugin.list" -}}
 emqx_management,emqx_recon,emqx_retainer
