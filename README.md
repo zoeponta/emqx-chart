@@ -94,10 +94,13 @@ The following table lists the configurable parameters of the drone charts and th
 
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
-| `auth.username.enabled` | Enable username authentication use configuration files | false |
-| `auth.username.users` | List of user info. | [] |
-| `auth.username.users[x].username` | Username | nil |
-| `auth.username.users[x].password` | Password | nil |
+| `auth.mnesia.enabled` | Enable username authentication use configuration files | false |
+| `auth.mnesia.passwordHash` | Password hash | sha256 |
+| `auth.mnesia.as` | Authenticate as `username` or `clientid` | username |
+| `auth.mnesia.users` | List of user info. | [] |
+| `auth.mnesia.users[x].login` | Username | nil |
+| `auth.mnesia.users[x].password` | Password | nil |
+| `auth.mnesia.users[x].superuser` | Login user is weather super user. | false |
 
 
 ## TODO

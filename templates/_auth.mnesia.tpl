@@ -1,6 +1,6 @@
 
 {{/*
-Environment of Mnesia Auth plugin for Secret
+Environment variables of Mnesia Auth plugin for Secret
 {{- include "emqx.auth.mnesia.secret" .Values.auth.mnesia }}
 */}}
 {{- define "emqx.auth.mnesia.secret" -}}
@@ -16,7 +16,7 @@ Environment of Mnesia Auth plugin for Secret
 {{- end }}
 
 {{/*
-Environment of Mnesia Auth plugin for ConfigMap
+Environment variables of Mnesia Auth plugin for ConfigMap
 {{- include "emqx.auth.mnesia.configmap" .Values.auth.mnesia }}
 */}}
 {{- define "emqx.auth.mnesia.configmap" -}}

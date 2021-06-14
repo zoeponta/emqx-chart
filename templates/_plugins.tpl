@@ -25,7 +25,7 @@ Plugin configurations for ConfigMap
 {{- include "emqx.auth.mnesia.configmap" .Values.auth.mnesia }}
 {{- end }}
 {{- if .Values.auth.redis.enabled }}
-{{- include "emqx.auth.redis" .Values.auth.redis }}
+{{- include "emqx.auth.redis.configmap" .Values.auth.redis }}
 {{- end }}
 {{- end }}
 
@@ -41,6 +41,6 @@ EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: {{ .Values.dashboard.defaultPassword | b
 {{- include "emqx.auth.mnesia.secret" .Values.auth.mnesia }}
 {{- end }}
 {{- if .Values.auth.redis.enabled }}
-{{- include "emqx.auth.redis-password" .Values.auth.redis }}
+{{- include "emqx.auth.redis.secret" .Values.auth.redis }}
 {{- end }}
 {{- end }}
