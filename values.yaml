@@ -140,13 +140,10 @@ ssl:
   # secret: ""
 
   ## TODO: Auto reload StatefulSet or Pod
-  ## EMQ X does not implement to reload certificates,
-  ## so you must restart StatefulSet or Pod by using some way.
-  ## See also: https://github.com/emqx/emqx/issues/3414
-  ## 方針
-  ## シークレットが変更されたら、API 経由でリスタート or コマンドを実行したい。
-  ## サイドカーで検知して localhost でつないでやるのが良さそう。クラスタ組んでいればどこか一ヶ所適用できればいい
-  ## curl -X PUT http://id:password@emqx-http:8081/api/v4/listeners/mqtt:tcp:external/restart
+  ##       EMQ X does not implement to reload certificates,
+  ##       so you must restart StatefulSet or Pod by using some way.
+  ##       See also: https://github.com/emqx/emqx/issues/3414
+  # autoreload: true
 
   ## Directory for certificates
   dir: /opt/emqx/etc/certs
