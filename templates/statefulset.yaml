@@ -24,10 +24,7 @@ spec:
       labels:
         {{- include "emqx.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      {{- include "emqx.image.pullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "emqx.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
@@ -59,6 +56,7 @@ spec:
             httpGet:
               path: /status
               port: management
+            initialDelaySeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:

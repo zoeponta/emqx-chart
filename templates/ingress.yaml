@@ -1,11 +1,9 @@
 {{- if .Values.ingress.enabled -}}
 {{- if .Values.dashboard.enabled -}}
-{{- $fullName := include "emqx.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
 {{- else -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
@@ -17,6 +15,9 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
     - hosts:
@@ -29,9 +30,19 @@ spec:
       http:
         paths:
           - path: /
+            {{- if semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion }}
+            pathType: {{ .Values.ingress.pathType | default "ImplementationSpecific" }}
+            {{- end }}
             backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ include "emqx.fullname" . }}-http
+                port:
+                  number: {{ .Values.service.http.ports.dashboard }}
+              {{- else }}
               serviceName: {{ include "emqx.fullname" . }}-http
               servicePort: {{ .Values.service.http.ports.dashboard }}
+              {{- end }}
     # TODO: Support ws and wss
 {{- end }}
 {{- end }}

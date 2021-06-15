@@ -1,5 +1,6 @@
 {{/*
 List of loaded plugins
+This chart must be required emqx_management plugin.
 */}}
 {{- define "emqx.plugin.list" -}}
 emqx_management,emqx_recon,emqx_retainer
@@ -12,17 +13,20 @@ emqx_management,emqx_recon,emqx_retainer
 {{- if .Values.auth.redis.enabled -}}
 ,emqx_auth_redis
 {{- end }}
-{{- if .Values.auth.username.enabled -}}
-,emqx_auth_username
+{{- if .Values.auth.mnesia.enabled -}}
+,emqx_auth_mnesia
 {{- end }}
 {{- end }}
 
 {{/*
 Plugin configurations for ConfigMap
 */}}
-{{- define "emqx.plugin.config" -}}
+{{- define "emqx.plugin.configmap" -}}
+{{- if .Values.auth.mnesia.enabled }}
+{{- include "emqx.auth.mnesia.configmap" .Values.auth.mnesia }}
+{{- end }}
 {{- if .Values.auth.redis.enabled }}
-{{- include "emqx.auth.redis" .Values.auth.redis }}
+{{- include "emqx.auth.redis.configmap" .Values.auth.redis }}
 {{- end }}
 {{- end }}
 
@@ -34,10 +38,10 @@ Plugin configurations for Secret
 EMQX_DASHBOARD__DEFAULT_USER__LOGIN: {{ .Values.dashboard.defaultUsername | b64enc }}
 EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: {{ .Values.dashboard.defaultPassword | b64enc }}
 {{- end }}
-{{- if .Values.auth.username.enabled }}
-{{- include "emqx.auth.username" .Values.auth.username }}
+{{- if .Values.auth.mnesia.enabled }}
+{{- include "emqx.auth.mnesia.secret" .Values.auth.mnesia }}
 {{- end }}
 {{- if .Values.auth.redis.enabled }}
-{{- include "emqx.auth.redis-password" .Values.auth.redis }}
+{{- include "emqx.auth.redis.secret" .Values.auth.redis }}
 {{- end }}
 {{- end }}

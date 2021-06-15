@@ -1,19 +1,8 @@
 {{/*
-Username Auth plugin
-{{- include "emqx.auth.username" .Values.auth.username }}
-*/}}
-{{- define "emqx.auth.username" -}}
-{{- range $i, $v := .users }}
-{{ printf "EMQX_AUTH__USER__%d__USERNAME" $i }}: {{ $v.username | b64enc }}
-{{ printf "EMQX_AUTH__USER__%d__PASSWORD" $i }}: {{ $v.password | b64enc }}
-{{- end }}
-{{- end }}
-
-{{/*
 Redis Auth/ACL plugin
-{{- include "emqx.auth.redis" .Values.auth.redis }}
+{{- include "emqx.auth.redis.configmap" .Values.auth.redis }}
 */}}
-{{- define "emqx.auth.redis" -}}
+{{- define "emqx.auth.redis.configmap" -}}
 EMQX_AUTH__REDIS__TYPE: {{ .type }}
 EMQX_AUTH__REDIS__SERVER: {{ .server }}
 {{- if eq .type "sentinel" }}
@@ -30,9 +19,9 @@ EMQX_AUTH__REDIS__ACL_CMD: {{ .aclCmd }}
 
 {{/*
 Redis Auth/ACL plugin (password only)
-{{ include "emqx.auth.redis-password" .Values.auth.redis }}
+{{ include "emqx.auth.redis.secret" .Values.auth.redis }}
 */}}
-{{- define "emqx.auth.redis-password" -}}
+{{- define "emqx.auth.redis.secret" -}}
 {{- if .password }}
 EMQX_AUTH__REDIS__PASSWORD: {{ .password | b64enc }}
 {{- end }}

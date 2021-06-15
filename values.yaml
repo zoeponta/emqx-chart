@@ -2,6 +2,12 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  ## Global image pull secrets
+  ## imagePullSecrets:
+  ##   - foo
+  ##   - bar
+  imagePullSecrets: []
 replicaCount: 3
 
 image:
@@ -61,6 +67,8 @@ service:
 
 ingress:
   enabled: false
+  ## Ingress Class
+  class: ""
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
@@ -90,7 +98,9 @@ nodeSelector: {}
 
 tolerations: []
 
-affinity: {}
+# affinity: {}
+## Pod Anti-Affinity
+podAntiAffinity: false
 
 ## Persist data to persistent volume
 persistence:
@@ -114,7 +124,7 @@ persistence:
 
 ## Get metrics
 metrics:
-  enabled: false
+  enabled: true
 
   ## TODO: Prometheus Operator
   servicemonitor:
@@ -136,9 +146,10 @@ ssl:
   # secret: ""
 
   ## TODO: Auto reload StatefulSet or Pod
-  ## EMQ X does not implement to reload certificates,
-  ## so you must restart StatefulSet or Pod by using some way.
-  ## See also: https://github.com/emqx/emqx/issues/3414
+  ##       EMQ X does not implement to reload certificates,
+  ##       so you must restart StatefulSet or Pod by using some way.
+  ##       See also: https://github.com/emqx/emqx/issues/3414
+  # autoreload: true
 
   ## Directory for certificates
   dir: /opt/emqx/etc/certs
@@ -155,13 +166,18 @@ management:
 
 ## Auth/ACL Plugins
 auth:
-  username:
-    ## Enable username auth plugin
-    ## link: https://docs.emqx.io/broker/latest/en/advanced/auth-username.html
+  mnesia:
+    ## Enable mnesia (username/clientid) auth plugin
+    ## link: https://docs.emqx.io/broker/latest/en/advanced/auth-mnesia.html
     enabled: false
+    ## Password hash
+    passwordHash: sha256
+    ## Auth as username or auth as clientid.
+    as: username
     users: []
-    #  - name: admin
+    #  - login: admin
     #    password: public
+    #    superuser: no (optional)
   redis:
     ## Enable redis auth plugin
     ## See emqx-auth-redis for all configurations.

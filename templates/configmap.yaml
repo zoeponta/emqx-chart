@@ -28,7 +28,7 @@ data:
   */}}
   EMQX_LOG__TO: console
   EMQX_LOG__LEVEL: {{ default "warning" .Values.loglevel }}
-  {{- include "emqx.plugin.config" . | nindent 2 }}
+  {{- include "emqx.plugin.configmap" . | nindent 2 }}
   {{- with .Values.extraEnv }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
