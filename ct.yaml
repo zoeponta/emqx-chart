@@ -1,5 +1,5 @@
 # See https://github.com/helm/chart-testing#configuration
 remote: origin
 charts:
-  - .
+  - emqx
 helm-extra-args: --timeout 600s
