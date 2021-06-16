@@ -8,6 +8,7 @@ global:
   ##   - foo
   ##   - bar
   imagePullSecrets: []
+
 replicaCount: 3
 
 image:
